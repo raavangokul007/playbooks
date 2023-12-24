@@ -1,0 +1,16 @@
+---
+- name: working with loops
+  hosts: apphosts
+  become: true
+  tasks:
+  - name: install git 
+    yum: "name=git state=present"
+  - name: install vim
+    yum: "name=vim state=present"
+  - name: install nano
+    yum: "name=nano state=present"
+  - name: install tree
+    yum: "name=tree state=present"
+  - name: install unzip
+    yum: "name=unzip state=present"
+...

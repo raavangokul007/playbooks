@@ -1,0 +1,25 @@
+---
+- name: installing apache httpd using copy module
+  hosts: apphosts
+  become: true
+  vars_files:
+   - variable_file.yml
+  tasks:
+  - name: installing apache httpd using yum module
+    yum:
+     name: httpd
+     state: latest
+  - name: copying index file into host location
+    template:
+     src: index.html
+     dest: /var/www/html/index.html
+    notify:
+      - re-starting the httpd serivice
+
+  handlers:
+  - name: re-starting the httpd serivice
+    service:
+     name: httpd
+     state: restarted
+     enabled: true
+...

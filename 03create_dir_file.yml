@@ -1,0 +1,22 @@
+---
+- name: Creating the file and directories.
+  hosts: all
+  become: true
+  tasks:
+  - name: Creating the directory on /tmp path
+    file:
+     path: /tmp/gokul_dir
+     state: directory
+     owner: autoansi
+     group: autoansi
+     mode: 1755
+
+  - name: creating the file in gokul_dir
+    file:
+     path: /tmp/gokul_dir/gokul07.sh
+     mode: 0755
+     owner: autoansi
+     group: autoansi
+     state: touch
+    
+...

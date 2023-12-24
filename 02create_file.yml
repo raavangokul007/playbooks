@@ -1,0 +1,13 @@
+---
+- name: creating the file on app hosts
+  hosts: apphosts
+  become: true
+  tasks:
+  - name: Create file at /tmp directory
+    file:
+     path: /tmp/gp_gokul.sh
+     mode: 0755
+     owner: autoannsi
+     group: autoansi
+     state: touch
+...

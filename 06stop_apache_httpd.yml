@@ -1,0 +1,11 @@
+---
+- name: Stoping the apache httpd service inall the decome app servers.
+  hosts: all
+  become: true
+  tasks:
+  - name: stoping the apache httpd services
+    service:
+     name: httpd
+     state: stoped
+     enbled: false
+...

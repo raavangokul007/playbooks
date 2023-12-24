@@ -1,0 +1,35 @@
+---
+- name: Working with ansible loops II
+  hosts: dbhosts
+  become: true
+  tasks:
+  - name: installing list of pacakges
+    yum: "name={{item}} state=present"
+    with_items:
+     - git
+     - httpd
+     - vim
+     - wget
+     - tree
+     - nano
+     - unzip
+
+...
+
+---
+- name: Working with ansible loops II
+  hosts: dbhosts
+  become: true
+  tasks:
+  - name: removing list of pacakges
+    yum: "name={{item}} state=absent"
+    with_items:
+     - git
+     - httpd
+     - vim
+     - wget
+     - tree
+     - nano
+     - unzip
+
+...

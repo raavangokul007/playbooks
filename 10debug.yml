@@ -1,0 +1,11 @@
+---
+- name: check the debug module
+  hosts: apphosts
+  become: true
+  vars:
+    name: RaavanGokul
+  tasks:
+  - name: checking the debug module
+    debug:
+     msg: "The variable name valure is: {{name}}"
+...

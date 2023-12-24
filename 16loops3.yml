@@ -1,0 +1,9 @@
+---
+- name: Working ansile lopps III
+  hosts: all
+  become: true
+  tasks:
+  - name: installing list of pkgs
+    yum:
+     name: ['git', 'httpd', 'vim', 'wget', 'tree', 'nano', 'unzip']
+...

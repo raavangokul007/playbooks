@@ -1,0 +1,18 @@
+---
+- name: remove the apache httpd service on all decome apps.
+  hosts: apphosts
+  become: true
+  tasks:
+  - name: stop the httpd service
+    service:
+      name: httpd
+      state: stopped
+  - name: pausing in 10 seconds
+    pause:
+      seconds: 5
+        #mode: sleep
+  - name: uninstaling the httpd
+    yum:
+     name: httpd
+     state: absent
+...

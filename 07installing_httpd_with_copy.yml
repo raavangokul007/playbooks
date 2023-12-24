@@ -1,0 +1,22 @@
+---
+- name: installing apache httpd using copy module
+  hosts: apphosts
+  become: true
+  vars:
+    companyName: gp-world logistics
+    servicegp: Check the GP logistics services
+  tasks:
+  - name: installing apache httpd using yum module
+    yum:
+     name: httpd
+     state: latest
+  - name: copying index file into host location
+    copy:
+     src: index.html
+     dest: /var/www/html/index.html
+  - name: starting the httpd serivice
+    service:
+     name: httpd
+     state: started
+     enabled: true
+...

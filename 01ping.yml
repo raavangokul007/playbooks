@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: ping the all the app aservers
+    ping:
+     count: 2
+...

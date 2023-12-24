@@ -1,0 +1,14 @@
+---
+- name: wokring with loops uisng user module
+  hosts: all
+  become: true
+  tasks:
+  - name: creating the users on all the hosts
+    user:
+     name="{{item}}"
+     create_home=yes
+    with_items:
+     - gokul
+     - billa
+     - veeran
+...
