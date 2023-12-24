@@ -1,0 +1,16 @@
+---
+- name: working with ansible loops for creatinf the users
+  hosts: all
+  become: true
+  tasks:
+  - name: create the user in app and db hosts
+    user:
+     name: "{{item.username}}"
+     create_home: "{{item.createhome}}"
+    with_items:
+     - { 'username': 'stella', 'createhome': no }
+     - { 'username': 'brunda', 'createhome': yes }
+     - { 'username': 'anu', 'createhome': yes }
+     - { 'username': 'akshaya', 'createhome': no }
+     - { 'username': 'kodi', 'createhome': yes }
+...

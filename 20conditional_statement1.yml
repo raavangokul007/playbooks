@@ -1,0 +1,32 @@
+---
+- name: Working with conditional statements
+  hosts: all
+  become: true
+  tasks:
+  - name: checking if the git is installed on all the servers.
+    shell: git --verison
+    register: gitVersion
+    ignore_errors: yes
+  - name: Displaying the msg wheather git is installaed or not?
+    when: gitVersion.stdout == ""
+    debug:
+      msg: "Git is not installed"
+  - name: Installing git RedHat os family
+    when: gitVersion.stdout == ""
+    yum:
+      name: git
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name: installing git on Debian os family
+    apt:
+      name: git
+      state: present
+    when: ansible_os_family == "Debian"
+  - name: checking git version after installing the pkg
+    shell: git --version
+    register: gitVersion
+  - name: displaying git version
+    when: gitVersion.stdout != ""
+    debug:
+      msg: "git version is: {{gitVersion.stdout}}"
+...

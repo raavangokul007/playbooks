@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: true
+  gather_facts: yes
+  tasks:
+  - name: remove the git tree wget pkgs on all the hosts
+    yum:
+      name: ['git', 'tree', 'wget']
+      state: absent
+    when: ansible_os_family == "RedHat"
+  - name: remove the pkgs from ubuntu hosts
+    apt:
+      name: ['git', 'tree', 'wget']
+      state: absent
+    when: ansible_os_family == "Debian"
+...
+
+---
+- hosts: all
+  become: true
+  gather_facts: yes
+  tasks:
+  - name: Installing the git tree wget pkgs on all the hosts
+    yum:
+      name: ['git', 'tree', 'wget']
+      state: present
+    when: ansible_os_family="RedHat"
+  - name: Installing the pkgs from ubuntu hosts
+    apt:
+      name: ['git', 'tree', 'wget']
+      state: present
+    when: ansible_os_family="Debian"
+...
+
