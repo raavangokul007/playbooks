@@ -125,7 +125,7 @@ pipeline {
     stages {
         stage('CheckoutCode') {
             steps {
-               git branch:"${params.BranchName}" , credentialsId: '9aad10da-e742-413a-a2f6-ce6a8b007f70', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+             git branch: "${params.BranchName}'" credentialsId: '039d9e6d-9b4b-4ab5-87da-663e8850d508', url: 'https://github.com/playdevops-co/maven-web-application.git'
              sh "echo The persona name is: ${params.PersonName}"
              }
         }
