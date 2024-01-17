@@ -1,0 +1,63 @@
+---
+- name: Installing the tomcat pkg
+  hosts: app
+  become: yes
+
+  tasks:
+  - name: Install the java
+    dnf:
+     name: "java-17-amazon-corretto-devel.x86_64"
+     state: "present"
+
+  - name: check the java version
+    ansible.builtin.shell:
+     cmd: "java --version"
+    register: javacehck
+
+  - name: Display the java version
+    debug:
+      var: javacehck
+
+  - name: Download the Tomcat pkg
+    uri:
+      url: "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.zip"
+      method: GET
+      dest: /opt
+    register: result
+  - name: Display the status and content of the download
+    debug:
+     var: result
+
+  - name: Extracting the zip file
+    ansible.builtin.shell:
+      cmd: "unzip /opt/apache-tomcat-9.0.83.zip -d /opt"
+
+  - name: find the name of the tomcat home
+    shell: "ls /opt| grep -v zip |grep -i apache"
+    register: apachedname
+
+  - name: Display the name of the tomca home
+    debug:
+      var: apachedname
+
+  - name: change the name of the tomcat directory
+    shell: "mv /opt/{{apachedname.stdout}}  /opt/tomcat9"
+    args:
+      creates: /opt/tomcat9
+
+  - name: find the script  file inside the tomcat
+    find:
+      paths: "/opt/tomcat9/bin/"
+      patterns: "*.sh"
+    register: found_files
+
+  - name: change the execute permissions for all sh files.
+    file:
+      path: "{{item.path}}"
+      mode: "+x"
+    with_items: "{{found_files.files}}"
+
+  - name: start the tomcat service
+    shell: "sh /opt/tomcat9/bin/startup.sh"
+...
+

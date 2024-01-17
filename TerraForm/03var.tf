@@ -8,7 +8,7 @@ variable "instance_type"{
     default = "t2.micro"
 }
 
-variable "NumberOfInstance"{
+variable "  "{
     description = "This Variable having the count value"
     default = "3"
 }

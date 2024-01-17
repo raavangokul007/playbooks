@@ -1,0 +1,43 @@
+---
+- name: Process input file
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Read input file
+      slurp:
+        src: "input_file.txt"
+      register: input_file_content
+
+    - name: Check if input file exists
+      fail:
+        msg: "Error: Input file 'input_file.txt' not found."
+      when: input_file_content.rc != 0
+
+    - name: Parse and process input lines
+      set_fact:
+        input_lines: "{{ input_file_content.content | b64decode | split('\n') }}"
+
+    - name: Loop through input lines
+      debug:
+        msg: |
+          Hostname: {{ host_name }}
+          Services: {{ services }}
+          Individual services:
+          - Service: {{ svc }}
+          - Name: {{ name }}
+          - Role: {{ role }}
+          - Hostname: {{ host_name }}
+      loop: "{{ input_lines }}"
+      loop_control:
+        loop_var: line
+
+      vars:
+        host_name: "{{ line.split(' ')[0] }}"
+        services: "{{ line.split(' ')[1] | regex_replace('[{}]', '') }}"
+        serviceArray: "{{ services.split(',') }}"
+
+      loop:
+        - "{{ serviceArray }}"
+        - "{{ serviceArray | map('regex_replace', '[{}]', '') | map('regex_replace', ':', '|') | map('split', '|') | list }}"
+        - "{{ host_name }}"

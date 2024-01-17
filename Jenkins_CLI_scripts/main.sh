@@ -1,11 +1,17 @@
 #!/bin/bash
 
 echo "1) Displaying the Jenkins Jobs..!"
+
 echo "2) Build the Jenkins Jobs...!"
+
 echo "3) Delete the Jenkins Job...!"
+
 echo "4) Delete the Jenkins Node..!"
+
 echo "5) Delete the Jenkins Views..!"
+
 echo "6) Getting the Job configuration XML format..!"
+
 echo "7) Create the Jenkins Job...!"
 
 echo "Please select your choice"

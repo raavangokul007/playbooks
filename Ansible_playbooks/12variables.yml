@@ -2,10 +2,11 @@
 - name: installing apache httpd using copy module
   hosts: apphosts
   become: true
-  vars_files:
-   - variable_file.yml
+  
   tasks:
   - name: installing apache httpd using yum module
+    tags:
+      
     yum:
      name: httpd
      state: latest

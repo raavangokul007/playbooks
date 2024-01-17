@@ -1,0 +1,14 @@
+---
+- name: This is the first playbooks for checking the connection against inventory using ping
+  hosts: all
+  gather_facts: false
+
+  tasks:
+  - name: Check the connectivity using ping
+    ping:
+    register: gokul
+
+  - name: Display the output
+    debug:
+      msg: gokul.stdout
+...

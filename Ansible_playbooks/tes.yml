@@ -1,0 +1,48 @@
+---
+- name: Process Input File
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Check if input file exists
+      stat:
+        path: "input_file.txt"
+      register: file_stat
+
+    - name: Read and process input file
+      when: file_stat.stat.exists
+      block:
+        - name: Read input lines
+          slurp:
+            path: "input_file.txt"
+          register: input_data_raw
+
+        - name: Convert input data to string
+          set_fact:
+            input_data: "{{ input_data_raw.content | b64decode | split('\n') | select | list }}"
+
+        - name: Process input lines
+          debug:
+            msg: |
+              Hostname: {{ item | regex_replace('.* (.+?) .*', '\\1') }}
+              Services: {{ item | regex_replace('.*\\{(.+?)\\}.*', '\\1') }}
+              Individual services:
+              {% for service in item | regex_replace('.*\\{(.+?)\\}.*', '\\1') | split(',') %}
+                {% set svc1 = service | regex_replace('{', '') | regex_replace('}', '') %}
+                {% set svc2 = svc1 | regex_replace(':', ' ') %}
+                {% set svc_array = svc2.split(' ') %}
+                {{ svc_array[0] }}
+                {{ svc_array[1]   }}
+                {{ svc_array[2] }}
+                {{ item | regex_replace('.* (.+?) .*', '\\1') }}
+              {% endfor %}
+              ------
+          loop: "{{ input_data }}"
+      tags:
+        - process_input
+    - name: Display error if input file not found
+      debug:
+        msg: "Error: Input file 'input_file.txt' not found."
+      when: not file_stat.stat.exists
+      tags:
+        - process_input

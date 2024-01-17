@@ -1,0 +1,21 @@
+---
+- name: This playbooks will use for tags
+  hosts: app:local
+  become: yes
+  vars:
+   
+  tasks:
+  - name: Insalling httpd service
+    yum:
+     name: httpd
+     state: latest
+  - name: copy the index file
+    copy:
+     src: index.html
+     dest: /var/www/html/index.html
+  - name: Starting the httpd service
+      service:
+      name: httpd
+     state: started
+     enabled: true
+...

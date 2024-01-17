@@ -11,9 +11,9 @@
 ##email subject 
 subject="Server Memory Status Alert"
 ##sending mail as
-from="devopstrainingblr@gmail.com"
+from="raavangokuldd@gmail.com"
 ## sending mail to
-to="devopstrainingblr@gmail.com"
+to="raavangokuldd@gmail.com"
 ## send carbon copy to
 ##also_to="devopstrainingblr@gmail.com
 
