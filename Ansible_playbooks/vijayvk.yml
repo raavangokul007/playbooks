@@ -1,0 +1,20 @@
+---
+- name: Copy and backup the key files to Linux hosts
+- hosts: certificate
+- become: true
+
+tasks: 
+- name: backup the keystore files
+  shell: "mv /etc/security/cert-stores/cdpdev-keystore.jks cdpdev-keystore.jks.bkp.`date +"%d-%m-%Y"`, "
+register: keystoreout
+- name: backup the truststore file
+  shell: "mv /etc/security/cert-stores/cdpdev-truststore.jks cdpdev-truststore.jks.bkp.`date +"%d-%m-%Y"`"
+register: truststoreout
+- name: Copy the key files from GitLab
+  uri:
+    url: 
+    method: GET
+    dest: /etc/security/cert-stores/
+...
+
+ 
