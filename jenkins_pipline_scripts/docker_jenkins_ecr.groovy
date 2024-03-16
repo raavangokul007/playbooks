@@ -1,5 +1,8 @@
 pipeline {
-    agent any
+    
+   agent{
+      label 'docker_builder'
+     }
     
     tools{
     maven "maven3.9.6"
@@ -22,23 +25,22 @@ pipeline {
         }
         stage('BuildDockerImage'){
             steps {
-                sh "docker build -t 495218826230.dkr.ecr.us-east-2.amazonaws.com/raavangokulecr:appV${buildNumber} ."
+                sh "docker build -t 495218826230.dkr.ecr.us-east-2.amazonaws.com/raavangokulecr:app${buildNumber} ."
             }
         }
         stage('DockerLoginAndPush'){
             steps {
                 sh "aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 495218826230.dkr.ecr.us-east-2.amazonaws.com"
-                sh "docker push 495218826230.dkr.ecr.us-east-2.amazonaws.com/raavangokulecr:appV${buildNumber}"
+                sh "docker push 495218826230.dkr.ecr.us-east-2.amazonaws.com/raavangokulecr:app${buildNumber}"
             }
         }
          stage('DockerContainerDeploymentOnQaEnv'){
             steps {
-                sshagent(['Docker_QA_SSH']) {
-                    
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.25.1 docker stop mavenwebapp|| true"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.25.1 docker rm mavenwebapp || true"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.25.1 aws ecr get-login-password --region us-east-2 | ssh -o StrictHostKeyChecking=no ubuntu@172.31.25.1 docker login --username AWS --password-stdin 495218826230.dkr.ecr.us-east-2.amazonaws.com"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.25.1  docker run --name mavenwebapp -d -p 8080:8080 495218826230.dkr.ecr.us-east-2.amazonaws.com/raavangokulecr:appV${buildNumber}" 
+                sshagent(['Docker_creds']) {
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.17.200 docker stop mavenwebapp || true"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.17.200 docker rm -f mavenwebapp || true"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.17.200 aws ecr get-login-password --region us-east-2 | ssh -o StrictHostKeyChecking=no ubuntu@172.31.17.200 docker login --username AWS --password-stdin 495218826230.dkr.ecr.us-east-2.amazonaws.com"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.17.200 docker run --name mavenwebapp -d -p 8080:8080 495218826230.dkr.ecr.us-east-2.amazonaws.com/raavangokulecr:app${buildNumber}" 
                 }
             }
         }
